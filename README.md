@@ -22,6 +22,16 @@ npm run start
 
 Api oraz jego dokumentacja w postaci swaggera dostępne pod adresem http://localhost:3001
 
+### Frontend
+Uruchomienie frontendu:
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+
 ### Wymagania
 
 - dane powinny być prezentowane w formie tabelarycznej 
