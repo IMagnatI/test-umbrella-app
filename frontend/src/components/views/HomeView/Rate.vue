@@ -1,6 +1,10 @@
 <template>
-  <td
-    class="c-rate"
+  <div
+    class="c-rate h-[48px] w-[49px] overflow-hidden border-r"
+    :class="{
+      'bg-gray-100': isActive,
+      'border border-red-500': isError,
+    }"
     :title="`row: ${rate.sourceCountry} col: ${rate.destinationCountry}`"
   >
     <input
@@ -10,10 +14,16 @@
       v-model="rateValue"
       @input="changeValue"
       @click="setActive"
-      class="c-rate__input"
+      class="h-full w-full border-0 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+      :class="{
+        'bg-gray-100': isActive,
+      }"
+      min="0"
+      max="100"
+      step="0.1"
     />
     <p v-else>'-'</p>
-  </td>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-facing-decorator'
@@ -25,10 +35,20 @@ import { rateService } from '@/main'
   components: {},
 })
 export default class Rate extends Vue {
-  public rateValue: number | string = 0
-
   @Prop({ type: Object, required: true })
   public rate!: Nullable<IRate>
+
+  public rateValue: number | string = 0
+  public isError: boolean = false
+
+  public get activeRate(): Nullable<IRate> {
+    return rateService.rate
+  }
+
+  public get isActive(): boolean {
+    if (!this.rate || !this.activeRate) return false
+    return this.rate && this.activeRate && this.rate.id === this.activeRate.id
+  }
 
   public mounted(): void {
     if (this.rate) {
@@ -42,12 +62,17 @@ export default class Rate extends Vue {
     }
   }
 
-  public changeValue(): void {
+  public async changeValue(): Promise<void> {
+    this.isError = false
     if (this.rate) {
-      rateService.saveRate({
-        ...this.rate,
-        rate: this.rateValue,
-      })
+      await rateService
+        .saveRate({
+          ...this.rate,
+          rate: this.rateValue,
+        })
+        .catch(() => {
+          this.isError = true
+        })
     }
   }
 }

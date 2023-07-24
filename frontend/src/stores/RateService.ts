@@ -58,6 +58,9 @@ export default class RateService extends Pinia {
     await RatesRepository.saveRate(rate).then((response) => {
       if (response?.error === false) {
         this.loadData()
+      } else {
+        this.isError = true
+        throw response.errorMsg
       }
     })
   }

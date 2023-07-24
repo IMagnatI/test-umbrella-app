@@ -6,6 +6,7 @@ export interface IRate {
   destinationCountry: string
   rate: number | string
   error?: boolean
+  errorMsg?: string
 }
 
 export interface IRateStore {

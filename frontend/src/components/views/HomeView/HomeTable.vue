@@ -1,63 +1,75 @@
 <template>
   <div class="c-homeTable">
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-        <thead
-          class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
-        >
-          <tr>
-            <th></th>
-            <th
-              scope="col"
-              class="px-2 py-3 text-center"
-              :class="{
-                'bg-gray-100': isActiveColumn(country),
-              }"
-              v-for="(country, index) in sourceCountries"
-              :key="`col_${country}_${index}`"
-              v-show="selectedColumn === country || selectedColumn === null"
-            >
-              {{ country }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            scope="row"
-            class=""
+    <div class="flex min-w-[1845px]">
+      <div class="flex">
+        <div class="flex items-center">
+          <p class="origin-left-top block -rotate-90 transform">Kod źródłowy</p>
+        </div>
+        <div class="flex flex-col">
+          <div class="mt-[24px] h-[49px] w-[49px] border"></div>
+          <div
+            class="h-[49px] w-[49px] border-b border-l border-r"
+            :class="{
+              'bg-gray-100': isActiveRow(country),
+            }"
             v-for="(country, index) in sourceCountries"
-            :key="`row_${country}_${index}`"
+            :key="`1row_${country}_${index}`"
+            v-show="selectedRow === country || !selectedRow"
           >
-            <th
-              class="px-2 py-3 text-center text-xs uppercase text-gray-700"
-              :class="{
-                'bg-gray-100': isActiveRow(country),
-                'bg-gray-50 dark:bg-gray-700 dark:text-gray-400':
-                  !isActiveRow(country),
-              }"
-              v-show="selectedRow === country || !selectedRow"
-            >
-              {{ country }}
-            </th>
-
-            <Rate
-              v-for="(destinationCountry, index) in sourceCountries"
-              :key="`rowData_${country}_${sourceCountries[index]}`"
-              v-show="
-                (selectedColumn === destinationCountry || !selectedColumn) &&
-                (selectedRow === country || !selectedRow)
-              "
-              :rate="
-                rateForDestinationCountry(
-                  ratesForSourceCountry(country),
-                  destinationCountry
-                )
-              "
-            >
-            </Rate>
-          </tr>
-        </tbody>
-      </table>
+            <p class="text-center font-bold">{{ country }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <p
+          class="text-center"
+          :class="{
+            absolute: !!selectedColumn,
+          }"
+        >
+          Kod docelowy
+        </p>
+        <div
+          class="flex h-[49px] flex-row border-b border-t"
+          :class="{
+            'mt-6': !!selectedColumn,
+          }"
+        >
+          <div
+            class="h-[49px] w-[49px] border-r"
+            :class="{
+              'bg-gray-100': isActiveColumn(country),
+            }"
+            v-for="(country, index) in sourceCountries"
+            :key="`1col_${country}_${index}`"
+            v-show="selectedColumn === country || !selectedColumn"
+          >
+            <p class="text-center font-bold">{{ country }}</p>
+          </div>
+        </div>
+        <div
+          class="flex flex-row border-b"
+          v-for="(country, index) in sourceCountries"
+          :key="`row3_${country}_${index}`"
+          v-show="selectedRow === country || !selectedRow"
+        >
+          <Rate
+            v-for="(destinationCountry, index) in sourceCountries"
+            :key="`rowData_${country}_${sourceCountries[index]}`"
+            v-show="
+              (selectedColumn === destinationCountry || !selectedColumn) &&
+              (selectedRow === country || !selectedRow)
+            "
+            :rate="
+              rateForDestinationCountry(
+                ratesForSourceCountry(country),
+                destinationCountry
+              )
+            "
+          >
+          </Rate>
+        </div>
+      </div>
     </div>
   </div>
 </template>
