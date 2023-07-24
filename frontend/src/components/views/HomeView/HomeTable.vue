@@ -1,11 +1,11 @@
 <template>
   <div class="c-homeTable">
     <div class="flex min-w-[1845px]">
-      <div class="flex">
-        <div class="flex items-center">
-          <p class="origin-left-top block -rotate-90 transform">Kod źródłowy</p>
-        </div>
-        <div class="flex flex-col">
+      <div class="flex items-center">
+        <p class="origin-left-top block -rotate-90 transform">Kraj źródłowy</p>
+      </div>
+      <div class="sticky left-0 flex">
+        <div class="flex flex-col bg-white">
           <div class="mt-[24px] h-[49px] w-[49px] border"></div>
           <div
             class="h-[49px] w-[49px] border-b border-l border-r"
@@ -13,10 +13,15 @@
               'bg-gray-100': isActiveRow(country),
             }"
             v-for="(country, index) in sourceCountries"
-            :key="`1row_${country}_${index}`"
+            :key="`row_${country}_${index}`"
+            :id="`row_${country}_${index}`"
             v-show="selectedRow === country || !selectedRow"
           >
-            <p class="text-center font-bold">{{ country }}</p>
+            <p
+              class="flex h-[49px] items-center justify-center text-center font-bold"
+            >
+              {{ country }}
+            </p>
           </div>
         </div>
       </div>
@@ -27,10 +32,10 @@
             absolute: !!selectedColumn,
           }"
         >
-          Kod docelowy
+          Kraj docelowy
         </p>
         <div
-          class="flex h-[49px] flex-row border-b border-t"
+          class="sticky top-0 flex h-[49px] flex-row border-b border-t bg-white"
           :class="{
             'mt-6': !!selectedColumn,
           }"
@@ -41,10 +46,15 @@
               'bg-gray-100': isActiveColumn(country),
             }"
             v-for="(country, index) in sourceCountries"
-            :key="`1col_${country}_${index}`"
+            :key="`col_${country}_${index}`"
+            :id="`col_${country}_${index}`"
             v-show="selectedColumn === country || !selectedColumn"
           >
-            <p class="text-center font-bold">{{ country }}</p>
+            <p
+              class="flex h-[49px] items-center justify-center text-center font-bold"
+            >
+              {{ country }}
+            </p>
           </div>
         </div>
         <div
@@ -56,6 +66,7 @@
           <Rate
             v-for="(destinationCountry, index) in sourceCountries"
             :key="`rowData_${country}_${sourceCountries[index]}`"
+            :class="{ elementToTests: index === 2 }"
             v-show="
               (selectedColumn === destinationCountry || !selectedColumn) &&
               (selectedRow === country || !selectedRow)

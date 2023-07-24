@@ -3,7 +3,7 @@
     class="c-rate h-[48px] w-[49px] overflow-hidden border-r"
     :class="{
       'bg-gray-100': isActive,
-      'border border-red-500': isError,
+      'border border-red-500': isError || !valid,
     }"
     :title="`row: ${rate.sourceCountry} col: ${rate.destinationCountry}`"
   >
@@ -60,6 +60,10 @@ export default class Rate extends Vue {
     if (this.rate) {
       rateService.setActiveRate(this.rate)
     }
+  }
+
+  public get valid(): boolean {
+    return this.rateValue >= 0 && this.rateValue <= 100
   }
 
   public async changeValue(): Promise<void> {
